@@ -335,3 +335,41 @@ After running the RMarkdown notebook, the Python script `summarise_family_popula
 
 ## Exploration of GT25 and GT31 sequence diversity
 
+To explore if the consistently poor performance of the CAZyme classifiers for CAZy families GT25 and GT31 was the result of high sequence diversity within these families, an all-versus-all DIAMOND pairwise alignment analysis was performed for each family.
+
+1. Download protein sequences
+
+```bash
+# downloads protein sequences from NCBI GenBank for GT25 and GT31
+# Download protein sequences are stored in the local CAZyme database
+scripts/seq_diversity/download_seqs.sh
+```
+
+2. Extract the protein sequences from the local CAZyme database and write the sequences to a multisequence FASTA file per family
+```bash
+scripts/seq_diversity/extract_seqs.sh
+```
+
+FASTA files written to:
+* `data/sequences/gt25.fasta`
+* `data/sequences/gt31.fasta`
+
+3. Run DIAMOND for all pairs of sequences
+
+```bash
+scripts/seq_diversity/run_diamond.sh
+```
+
+Output written to:
+* `data/sequences/sequences/gt25.diamond.out`
+* `data/sequences/sequences/gt31.diamond.out`
+
+3. Summarise and visualise the results
+
+The Jupyter notebook `notebooks/gt_sequence_diversity.ipynb` was used to calculate the BLAST Score Ratio to facilitate comparing the degree of sequence similarity across all and to visualise the BSR.
+
+The figures generated using this notebook are written to:
+* `results/sequences/gt25-clustermap.pdf` - presented in the SI
+* `results/sequences/gt25-clustermap-fullSized.pdf` - all labels are readable and is provided in the online repository
+* `results/sequences/gt31-clustermap.pdf` - presented in the SI
+* `results/sequences/gt31-clustermap-fullSized.pdf` - all labels are readable and is provided in the online repository

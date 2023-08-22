@@ -12,6 +12,18 @@ Emma E. M. Hobbs<sup>1,2,3</sup>, Tracey, M. Gloster<sup>1</sup>, Leighton Prich
 > 2. Strathclyde Institute of Pharmacy and Biomedical Sciences, University of Strathclyde, Glasgow G4 ORE, UK
 > 3. Cell and Molecular Sciences, James Hutton Institute, Invergowrie, Dundee DD2 5DA, UK
 
+```latex
+@misc{Hobbs2023,
+author = "Emma E. M. Hobbs and Tracey M. Gloster and Leighton Pritchard",
+title = "Independent and Comprehensive
+Benchmarking of CAZyme classifiers: dbCAN,
+Hotpep, CUPP and eCAMI",
+  howpublished = "\url{https://hobnobmancer.github.io/SI_Hobbs_et_al_2023_cazyme_classifier_evaluation/}",
+  year = 2023,
+  note = "Version 1. DOI:10.5281/zenodo.8123588"
+}
+```
+
 ## The comprehensive report can be found [here](https://hobnobmancer.github.io/SI_Hobbs_et_al_2023_cazyme_classifier_evaluation/notebooks/2023-cazyme-classifier-eval.html)
 
 To reproduce the analyses, run all commands provided in the walkthrough from the root of this directory.

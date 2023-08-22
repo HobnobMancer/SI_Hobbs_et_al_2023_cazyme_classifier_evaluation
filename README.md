@@ -112,32 +112,210 @@ You can use this archive to browse, validate, reproduce, or build on the phyloge
 
 We recommend creating a conda environment specific for this activity, for example using the commands:
 ```bash
-conda create -n pyrewton python=3.9 -y
+conda create -n pyrewton python=3.9 cazomevolve mmseqs2 -y
 conda activate pyrewton
 conda install --file requirements.txt -y -c bioconda -c conda-forge -c predector
+pip3 install pyrewton
 ```
 
 ### dbCAN version 2
 The installation instructions for `dbCAN` v==2.0.11 can be found [here](https://github.com/linnabrown/run_dbcan/tree/fde6d7225441ef3d4cb29ea29e39cfdcc41d8b19) and were followed to install dbCAN for the analysis presented in the manuscript.
 
+### dbCAN version 3
+v==3.0.7
+
+### dbCAN version 4
+v==4.0.0
+
+### CUPP
+ADD INSTALLATION INSRUCTIONS
+
+### Repo installation structure
+
+```bash
+tools
+dbcan_2
+dbcan_3
+dbcan_4
+```
+
+**A separate virual environment was created for each version of dbCAN**
+
 # Method: Reproducing the analyses
 
 Several of the data files required to repeat the analyses presented in the manuscript are stored (available for use) in the repo. These files are stored in the `data/` directory:
 
-## ## Build a local CAZyme database
+## Build a local CAZyme database
 
 Configure using [`cazy_webscraper`](https://hobnobmancer.github.io/cazy_webscraper/) (Hobbs _et al., 2022) to download all data from the CAZy database, and compile the data into a local CAZyme database.
-
-The CAZy database was downloaded on 2023-07-26.
 
 > cazy_webscraper: local compilation and interrogation of comprehensive CAZyme datasets
 Emma E. M. Hobbs, Tracey M. Gloster, Leighton Pritchard
 bioRxiv 2022.12.02.518825; doi: https://doi.org/10.1101/2022.12.02.518825
 
+The CAZy database was downloaded on 2023-07-26 using the bash script `download_cazy.sh`.
+
 ```bash
-# create a local CAZyme database
-scripts/build_cazyme_db.sh <email>
+scripts/cazy/download_cazy.sh <email>
 ```
 
-This generated the local CAZyme database `data/cazy/cazy_db`.
+This generated the local CAZyme database `data/cazy/cazy-db_2023-07-26.db`.
 
+## Select test sets
+
+Retrieved the test sets from the previous evaluation (presented in the following poster [Hobbs et al., 2021](https://doi.org/10.6084/m9.figshare.14370836.v3)), which comprised 40 bacterial and 30 eukaryotic genomes.
+
+The bash script `get_cazy_sampling.sh` was used to coordinate querying the local CAZyme database (`data/cazy/cazy-db_2023-07-26.db`) to extract the number of unique GenBank protein IDs associated with each species listed in CAZy. These data were written to a CSV file by the bash script (`data/test_sets/cazy_species_sizes.csv`).
+
+The CSV file was mannually explore to identify an addition 10 eukaryotic genomes, with the assembly status of 'complete' in the NCBI Assembly database and containing at least 100 proteins listed in the local CAZyme database , to be added to the test sets from the previous evaluation.
+
+**Output:**
+* A CSV file listing all tests sets (including the taxonomic classification (including kingdom, genus and species)) is presented in `data/test_sets/test_sets-summary.csv`.
+
+The Python script `csv_to_yml.py` was used to generate a Yaml file summarising the test sets, and to write out all the NCBI Assembly version accessions to a plain text file (`data/test_sets/test_sets.txt`).
+
+```bash
+scripts/test_sets/csv_to_yml.py
+```
+
+**Output:**
+* The NCBI Assembly version accession for each test set is listed in `data/test_sets/test_sets-genomes.txt`
+* A YAML file listing the NCBI taxonomic ID and associated NCBI Assembly version accession and assembly name for each genome, written to `data/test_sets/test_sets-taxs.yaml`
+
+GenBank assemblies were used for this analysis not reference (RefSeq genomes) because CAZy primarily annotates protein sequences from the NCBI GenBank database, and thus contains very few proteins from the NCBI RefSeq database.
+
+## Compile test sets
+
+The plain text file of NCBI Assembly version accessions (`data/test_sets/test_sets-genomes.txt`) was used as input to `ncbi-genome-download` tool to download the protein FASTA files for each assembly. This was coordinated using the bash script `download_genomes.sh`:
+
+```bash
+scripts/test_sets/download_genomes.sh
+```
+
+The protein FASTA files were written to the `data/test_sets/proteomes` directory.
+
+`pyrewton` was used to generate a data set per downloaded genome .faa file, consisting of 100 randomly selected proteins that are listed in the local CAZy database (from here on referred to as 'known CAZymes'), and the 100 protein sequences with the highest BLAST Score Ratio against the 100 selected known CAZymes (from here on referred to as 'known non-CAZymes').
+
+This was coordinated using the bash script `create_test_sets.sh`
+
+```bash
+scripts/test_sets/create_test_sets.sh
+```
+
+**Output:**
+* For each genome, a single test set is created containing a total of 200 sequences, written to disk as a multisequence protein FASTA file (`.faa`). These are stored in `data/test_sets/test_sets/test_sets/` directory.
+* The CSV files describing the alignment scores were written to `data/test_sets/test_sets/alignment_scores` by `pyrewton`.
+* A CSV file summarising the proportion of the respective CAZome incorported into each test set (`data/test_sets/test_sets/cazome_coverage_2023_07_26-10_38_27.txt`)
+* A CSV file listing the NCBI protein version accessions of all proteins incorported into all test sets, and also listing the NCBI Assemmbly version accession of the source genome and marking if the protein is (1) or is not (0) listed in the local CAZyme database (`data/test_sets/test_sets/test_set_composition_2023_07_26-10_38_27.txt`)
+
+## Run CAZyme classifiers
+
+Each CAZyme classifier was used to parse all test sets FASTA files. A separate bash script was used to coordinate running each CAZyme classifier:
+
+**dbCAN_2**:
+```bash
+scripts/tools/run_dbcan_2.sh
+```
+
+**dbCAN_3**:
+```bash
+scripts/tools/run_dbcan_3.sh
+```
+
+**dbCAN_4**:
+```bash
+scripts/tools/run_dbcan_4.sh
+```
+
+**CUPP**:
+```bash
+scripts/tools/run_cupp.py
+```
+
+The output for all tools was written to the `data/tool_outputs` directory. 
+
+Each tool is given its own subdirectory within `data/tool_outputs/`.
+
+Each test set is given it own subdirectory within each tool subdirectory:
+
+```bash
+└── data
+   └── tools_output
+      ├── cupp
+      │   ├── GCA_900635675.1
+      │   └── GCA_900638075.1
+      │       ├── cupp.log
+      │       ├── cupp_output.fasta
+      │       └── cupp_output.fasta.log
+      ├── dbcan_2
+      │   ├── GCA_900635675.1
+      │   └── GCA_900638075.1
+      │       ├── dbcan.log
+      │       ├── diamond.out
+      │       ├── hmmer.out
+      │       ├── Hotpep.out
+      │       ├── overview.txt
+      │       └── uniInput
+      ├── dbcan_3
+      │   ├── GCA_900635675.1
+      │   └── GCA_900638075.1
+      │       ├── dbcan.log
+      │       ├── diamond.out
+      │       ├── eCAMI.out
+      │       ├── hmmer.out
+      │       ├── overview.txt
+      │       └── uniInput
+      └── dbcan_4
+          ├── GCA_900635675.1
+          └── GCA_900638075.1
+              ├── dbcan.log
+              ├── dbsub.out
+              ├── diamond.out
+              ├── dtemp.out
+              ├── hmmer.out
+              ├── overview.txt
+              └── uniInput
+```
+
+## Calculate statistics
+
+Use `pyrewton` to calculate performance statistics for each level of classification.
+
+Performance statistics:
+* Sensitivity
+* Specificity
+* Precision
+* F1-score
+* Accuracy
+* Rand index (multi-label classifications only)
+* Adjusted Rand index (multi-label classifications only)
+
+Levels of classification:
+* Binary CAZyme/non-CAZyme classification
+* Binary classification per CAZy class
+* Multilabel CAZy class classification
+* Binary classification per CAZy family
+* Multilabel classification per CAZy family
+
+Statistics were calculated across the entire data set, and per kingdom (bacteria and eukaryotes).
+
+Statistics were calculated for each classifier and per tool witihn each classifier:
+* dbCAN2:
+  * DIAMOND
+  * HMMER
+  * Hotpep
+* dbCAN3:
+  * DIAMOND
+  * HMMER
+  * eCAMI
+* dbCAN4:
+  * DIAMOND
+  * HMMER
+  * dbCAN-sub (implementation of HMMER)
+* CUPP
+
+The output (a series of dataframes) were written to the `results/` directory.
+
+# The Report and Evaluation
+
+After the analysisi s done the Python script `summarise_family_populations.py` can be run to generate a CSV file listing  the number of unique NCBI protein version accessions listed in the local CAZyme database for each CAzy family, the total number of proteins included across all test sets per CAZy family, and the percentage of the CAZy family population represented in the test sets. This file is written to `data/test_sets/family_representation.csv`.

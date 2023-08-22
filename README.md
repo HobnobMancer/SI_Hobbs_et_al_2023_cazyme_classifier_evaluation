@@ -29,6 +29,7 @@ note = {Version 1. DOI:10.5281/zenodo.8123588}
 To reproduce the analyses, run all commands provided in the walkthrough from the root of this directory.
 
 # Independent and comprehensive evaluation of CAZyme classifiers
+## [Link to the final evaluation and report](https://hobnobmancer.github.io/SI_Hobbs_et_al_2023_cazyme_classifier_evaluation/notebooks/2023-cazyme-classifier-eval.html)
 
 CAZyme classifiers analyse query protein sequence and predict CAZyme domains and associated CAZy family annotations. This enables exploratory analysis of CAZyme complements not presently catalogued in the CAZy database (www.cazy.org). Each CAZyme classifier implements a different method to predict CAZy family annotations.
 

@@ -320,8 +320,15 @@ Statistics were calculated for each classifier and per tool witihn each classifi
   * dbCAN-sub (implementation of HMMER)
 * CUPP
 
-The output (a series of dataframes) were written to the `results/` directory.
+The output (a series of dataframes) were written to the `results/` directory. Note, owing to the number and sizes of the files, the `results/` directory is provided as a ZIP archive file in this repository.
+
 
 # The Report and Evaluation
 
-After the analysisi s done the Python script `summarise_family_populations.py` can be run to generate a CSV file listing  the number of unique NCBI protein version accessions listed in the local CAZyme database for each CAzy family, the total number of proteins included across all test sets per CAZy family, and the percentage of the CAZy family population represented in the test sets. This file is written to `data/test_sets/family_representation.csv`.
+The RMarkdown notebook `notebooks/2023-cazyme-classifier-eval.Rmd` was used to interrogate and visulise the performance statistics calculated by `pyrewton`. 
+
+A HTML version of notebook can be [viewed here]().
+
+All output from the notebook is available in the `report/` directory. Note, owing to the number and sizes of the files, the `report/` directory is provided as a ZIP archive file in this repository.
+
+After running the RMarkdown notebook, the Python script `summarise_family_populations.py` can be run to generate a CSV file listing  the number of unique NCBI protein version accessions listed in the local CAZyme database for each CAzy family, the total number of proteins included across all test sets per CAZy family, and the percentage of the CAZy family population represented in the test sets. This file is written to `data/test_sets/family_representation.csv`.

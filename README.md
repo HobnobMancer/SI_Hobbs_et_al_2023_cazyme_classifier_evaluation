@@ -327,7 +327,7 @@ The output (a series of dataframes) were written to the `results/` directory. No
 
 The RMarkdown notebook `notebooks/2023-cazyme-classifier-eval.Rmd` was used to interrogate and visulise the performance statistics calculated by `pyrewton`. 
 
-A HTML version of notebook can be [viewed here]().
+A HTML version of notebook can be [viewed here](https://hobnobmancer.github.io/SI_Hobbs_et_al_2023_cazyme_classifier_evaluation/notebooks/2023-cazyme-classifier-eval.html).
 
 All output from the notebook is available in the `report/` directory. Note, owing to the number and sizes of the files, the `report/` directory is provided as a ZIP archive file in this repository.
 

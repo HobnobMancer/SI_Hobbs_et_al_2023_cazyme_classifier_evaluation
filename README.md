@@ -281,7 +281,20 @@ Each test set is given it own subdirectory within each tool subdirectory:
 
 Use `pyrewton` to calculate performance statistics for each level of classification.
 
-Performance statistics:
+Use the YAML file `data/test_sets/test_sets-kingdoms.yaml` and the `--tax_groups` flag to evaluate the performance across all test sets and per taxonomic kingdom.
+
+```bash
+scripts/calculate_stats.sh
+```
+
+The levels of classification that are evaluated:
+* Binary CAZyme/non-CAZyme classification
+* Binary classification per CAZy class
+* Multilabel CAZy class classification
+* Binary classification per CAZy family
+* Multilabel classification per CAZy family
+
+The performance statistics calculated for each level of CAZyme classification: 
 * Sensitivity
 * Specificity
 * Precision
@@ -289,13 +302,6 @@ Performance statistics:
 * Accuracy
 * Rand index (multi-label classifications only)
 * Adjusted Rand index (multi-label classifications only)
-
-Levels of classification:
-* Binary CAZyme/non-CAZyme classification
-* Binary classification per CAZy class
-* Multilabel CAZy class classification
-* Binary classification per CAZy family
-* Multilabel classification per CAZy family
 
 Statistics were calculated across the entire data set, and per kingdom (bacteria and eukaryotes).
 

@@ -5,7 +5,16 @@ Supplementary Information for the independent benchmarking of CAZyme classifiers
 
 This repository contains supplementary information for analyses reported in Hobbs et al. (2023), independently and comprehensively evaluating the CAZyme classifiers dBCAN2, dbCAN3, dbCAN4, eCAMI and CUPP.
 
-Run all commands provided in the walkthrough from the root of this directory.
+A citation for this work will be added once available. At the present please cite this repository as the source, the DOI:10.5281/zenodo.8123588, and the authors (in order):
+Emma E. M. Hobbs<sup>1,2,3</sup>, Tracey, M. Gloster<sup>1</sup>, Leighton Prichard<sup>2</sup>.
+
+> 1. School of Biology and Biomedical Sciences Research Complex, University of St Andrews, North Haugh, St Andrews, Fife, KY16 9ST, UK
+> 2. Strathclyde Institute of Pharmacy and Biomedical Sciences, University of Strathclyde, Glasgow G4 ORE, UK
+> 3. Cell and Molecular Sciences, James Hutton Institute, Invergowrie, Dundee DD2 5DA, UK
+
+## The comprehensive report can be found [here](https://hobnobmancer.github.io/SI_Hobbs_et_al_2023_cazyme_classifier_evaluation/notebooks/2023-cazyme-classifier-eval.html)
+
+To reproduce the analyses, run all commands provided in the walkthrough from the root of this directory.
 
 # Independent and comprehensive evaluation of CAZyme classifiers
 

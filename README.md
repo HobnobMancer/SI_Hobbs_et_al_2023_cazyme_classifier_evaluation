@@ -3,7 +3,9 @@ Supplementary Information for the independent benchmarking of CAZyme classifiers
 
 [![DOI](https://zenodo.org/badge/624780187.svg)](https://zenodo.org/badge/latestdoi/624780187)
 
-This repository contains supplementary information for analyses reported in Hobbs et al. (2023), independently and comprehensively evaluating the CAZyme classifiers dBCAN2, dbCAN3, dbCAN4, eCAMI and CUPP.
+Carbohydrate Active enZymes are proteins that catalyse the generation, modification and degradation of oligo- and poly-saccharides. The [CAZy database](www.cazy.org) classifies CAZymes into sequence based families, which are in turn grouped into functionally broad classes. Therefore, CAZy class and family annotations correspond to presumed shared mechanism and structure fold, enabling principled prediction of enzyme function. Consequently,  methods to annotate novel CAZymes are vital to progressing research in human, animal and plant pathogenesis, and biomass degradation.
+
+This repository contains supplementary information for analyses reported in Hobbs et al. (2023), independently and comprehensively evaluating the CAZyme classifiers (software tools that predict CAZy family classifications): dbCAN2, dbCAN3, dbCAN4, eCAMI and CUPP.
 
 A citation for this work will be added once available. At the present please cite this repository as the source, the DOI:10.5281/zenodo.8123588, and the authors (in order):
 Emma E. M. Hobbs<sup>1,2,3</sup>, Tracey, M. Gloster<sup>1</sup>, Leighton Prichard<sup>2</sup>.

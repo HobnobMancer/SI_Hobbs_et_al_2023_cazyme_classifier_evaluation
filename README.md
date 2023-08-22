@@ -327,8 +327,49 @@ The output (a series of dataframes) were written to the `results/` directory. No
 
 The RMarkdown notebook `notebooks/2023-cazyme-classifier-eval.Rmd` was used to interrogate and visulise the performance statistics calculated by `pyrewton`. 
 
-A HTML version of notebook can be [viewed here]().
+A HTML version of notebook can be [viewed here](https://hobnobmancer.github.io/SI_Hobbs_et_al_2023_cazyme_classifier_evaluation/notebooks/2023-cazyme-classifier-eval.html).
 
 All output from the notebook is available in the `report/` directory. Note, owing to the number and sizes of the files, the `report/` directory is provided as a ZIP archive file in this repository.
 
 After running the RMarkdown notebook, the Python script `summarise_family_populations.py` can be run to generate a CSV file listing  the number of unique NCBI protein version accessions listed in the local CAZyme database for each CAzy family, the total number of proteins included across all test sets per CAZy family, and the percentage of the CAZy family population represented in the test sets. This file is written to `data/test_sets/family_representation.csv`.
+
+## Exploration of GT25 and GT31 sequence diversity
+
+To explore if the consistently poor performance of the CAZyme classifiers for CAZy families GT25 and GT31 was the result of high sequence diversity within these families, an all-versus-all DIAMOND pairwise alignment analysis was performed for each family.
+
+1. Download protein sequences
+
+```bash
+# downloads protein sequences from NCBI GenBank for GT25 and GT31
+# Download protein sequences are stored in the local CAZyme database
+scripts/seq_diversity/download_seqs.sh
+```
+
+2. Extract the protein sequences from the local CAZyme database and write the sequences to a multisequence FASTA file per family
+```bash
+scripts/seq_diversity/extract_seqs.sh
+```
+
+FASTA files written to:
+* `data/sequences/gt25.fasta`
+* `data/sequences/gt31.fasta`
+
+3. Run DIAMOND for all pairs of sequences
+
+```bash
+scripts/seq_diversity/run_diamond.sh
+```
+
+Output written to:
+* `data/sequences/sequences/gt25.diamond.out`
+* `data/sequences/sequences/gt31.diamond.out`
+
+3. Summarise and visualise the results
+
+The Jupyter notebook `notebooks/gt_sequence_diversity.ipynb` was used to calculate the BLAST Score Ratio to facilitate comparing the degree of sequence similarity across all and to visualise the BSR.
+
+The figures generated using this notebook are written to:
+* `results/sequences/gt25-clustermap.pdf` - presented in the SI
+* `results/sequences/gt25-clustermap-fullSized.pdf` - all labels are readable and is provided in the online repository
+* `results/sequences/gt31-clustermap.pdf` - presented in the SI
+* `results/sequences/gt31-clustermap-fullSized.pdf` - all labels are readable and is provided in the online repository

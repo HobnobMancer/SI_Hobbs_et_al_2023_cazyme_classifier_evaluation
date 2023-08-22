@@ -14,13 +14,13 @@ Emma E. M. Hobbs<sup>1,2,3</sup>, Tracey, M. Gloster<sup>1</sup>, Leighton Prich
 
 ```latex
 @misc{Hobbs2023,
-author = "Emma E. M. Hobbs and Tracey M. Gloster and Leighton Pritchard",
-title = "Independent and Comprehensive
+author = {Emma E. M. Hobbs and Tracey M. Gloster and Leighton Pritchard},
+title = {Independent and Comprehensive
 Benchmarking of CAZyme classifiers: dbCAN,
-Hotpep, CUPP and eCAMI",
-  howpublished = "\url{https://hobnobmancer.github.io/SI_Hobbs_et_al_2023_cazyme_classifier_evaluation/}",
-  year = 2023,
-  note = "Version 1. DOI:10.5281/zenodo.8123588"
+Hotpep, CUPP and eCAMI},
+howpublished = {\url{https://hobnobmancer.github.io/SI_Hobbs_et_al_2023_cazyme_classifier_evaluation/}},
+year = {2023},
+note = {Version 1. DOI:10.5281/zenodo.8123588}
 }
 ```
 

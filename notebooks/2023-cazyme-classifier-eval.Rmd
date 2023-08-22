@@ -4498,7 +4498,7 @@ p.gh.poor.pops
 
 ```{r saveGhPoorFams, include=FALSE}
 dir.create("../report/cazy_family_classification/poor_performing_fams/", recursive=FALSE)
-pdf(file = "../report/cazy_family_classification/poor_performing_fams/poorFamSensGH.pdf", width = 8, height = 8)
+pdf(file = "../report/cazy_family_classification/poor_performing_fams/poorFamSensGH.pdf", width = 8, height = 5)
 p.gh.poor.pops
 dev.off()
 ```
@@ -4520,7 +4520,7 @@ p.gt.poor.pops
 ```
 
 ```{r saveGtPoorFams, include=FALSE}
-pdf(file = "../report/cazy_family_classification/poor_performing_fams/poorFamSensGT.pdf", width = 8, height = 6.2)
+pdf(file = "../report/cazy_family_classification/poor_performing_fams/poorFamSensGT.pdf", width = 8, height = 4)
 p.gt.poor.pops
 dev.off()
 ```
@@ -4541,7 +4541,7 @@ p.pl.poor.pops
 ```
 
 ```{r savePlPoorFams, include=FALSE}
-pdf(file = "../report/cazy_family_classification/poor_performing_fams/poorFamSensPL.pdf", width = 8, height = 3.5)
+pdf(file = "../report/cazy_family_classification/poor_performing_fams/poorFamSensPL.pdf", width = 8, height = 3)
 p.pl.poor.pops
 dev.off()
 ```
@@ -4605,7 +4605,7 @@ p.cbm.poor.pops
 ```
 
 ```{r saveCbmPoorFams, include=FALSE}
-pdf(file = "../report/cazy_family_classification/poor_performing_fams/poorFamSensCbm.pdf", width = 8, height = 8)
+pdf(file = "../report/cazy_family_classification/poor_performing_fams/poorFamSensCbm.pdf", width = 8, height = 6)
 p.cbm.poor.pops
 dev.off()
 ```
@@ -4699,8 +4699,6 @@ kable(fam_ri_stats_df_tax.all, caption="Rand Index of CAZyme famifier classifici
 ```
 
 ```{r riCalcFamPlot, echo=FALSE}
-cazy_fam_tax_df
-
 colnames(fam_ri_stats_df_tax.all) <- c("Prediction_tool", "Lower.CI", "Mean", "Upper.CI", "SD", "Taxonomic.Group")
 fam_ri_stats_df_tax.all$Taxonomic.Group <- factor(fam_ri_stats_df_tax.all$Taxonomic.Group, levels=c('Bacteria','All','Eukaryote'))
 

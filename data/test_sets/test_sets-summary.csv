@@ -1,0 +1,81 @@
+﻿NCBI:txid,Assembly name,Version accession,Organism,Kingdom,Group
+203119,ASM1586v1,GCA_000015865.1,Acetivibrio thermocellus ATCC 27405,Bacteria,firmicutes
+498211,ASM1922v1,GCA_000019225.1,Cellvibrio japonicus Ueda107,Bacteria,g-proteobacteria
+515635,ASM2164v1,GCA_000021645.1,Dictyoglomus turgidum DSM 6724,Bacteria,bacteria
+394503,ASM2206v1,GCA_000022065.1,Ruminiclostridium cellulolyticum H10,Bacteria,firmicutes
+561229,ASM2356v1,GCA_000023565.1,Dickeya chrysanthemi Ech1591,Bacteria,enterobacteria
+479432,ASM2486v1,GCA_000024865.1,Streptosporangium roseum DSM 43021,Bacteria,high G+C Gram-positive bacteria
+509190,ASM9228v1,GCA_000092285.1,Caulobacter segnis ATCC 21756,Bacteria,a-proteobacteria
+749414,ASM9238v1,GCA_000092385.1,Streptomyces bingchenggensis BCW-1,Bacteria,high G+C Gram-positive bacteria
+720554,ASM23708v1,GCA_000237085.1,Acetivibrio clariflavus DSM 19732,Bacteria,firmicutes
+212767,ASM32856v1,GCA_000328565.1,Mycobacterium sp. JS623 ,Bacteria,high G+C Gram-positive bacteria
+1137651,ASM34922v1,GCA_000349225.1,Xanthomonas citri subsp. citri Aw12879,Bacteria,g-proteobacteria
+1308541,ASM81688v1,GCA_000816885.1,Xanthomonas citri subsp. citri A306,Bacteria,g-proteobacteria
+1334564,ASM82877v1,GCA_000828775.1,Serratia marcescens SM39,Bacteria,enterobacteria
+1520,ASM83310v2,GCA_000833105.2,Clostridium beijerinckii,Bacteria,firmicutes
+1292358,ASM83514v1,GCA_000835145.1,Bacillus amyloliquefaciens KHG19,Bacteria,firmicutes
+1637999,ASM97276v1,GCA_000972765.1,Verrucomicrobia bacterium IMCC26134,Bacteria,verrucomicrobia
+192,ASM131501v1,GCA_001315015.1,Azospirillum brasilense,Bacteria,a-proteobacteria
+36745,ASM200330v1,GCA_002003305.1,Clostridium saccharoperbutylacetonicum,Bacteria,firmicutes
+1352,ASM202504v1,GCA_002025045.1,Enterococcus faecium,Bacteria,firmicutes
+2026799,ASM231049v1,GCA_002310495.1,Nibricoccus aquaticus,Bacteria,verrucomicrobia
+571,ASM290639v1,GCA_002906395.1,Klebsiella oxytoca,Bacteria,enterobacteria
+1940567,ASM340313v1,GCA_003403135.1,Dickeya dianthicola,Bacteria,enterobacteria
+61645,ASM394076v1,GCA_003940765.1,Enterobacter asburiae,Bacteria,enterobacteria
+562,ASM522158v1,GCA_005221585.1,Escherichia coli,Bacteria,E. coli
+562,ASM522190v1,GCA_005221905.1,Escherichia coli,Bacteria,E. coli
+661488,ASM797018v1,GCA_007970185.1,Pseudobacter ginsenosidimutans,Bacteria,CFB group bacteria
+304207,ASM869410v1,GCA_008694105.1,Schleiferilactobacillus harbinensis,Bacteria,firmicutes
+37734,ASM970734v1,GCA_009707345.1,Enterococcus casseliflavus,Bacteria,firmicutes
+284038,ASM993631v1,GCA_009936315.1,Streptomyces antimycoticus,Bacteria,high G+C Gram-positive bacteria
+1134687,ASM1009300v1,GCA_010093005.1,Klebsiella michiganensis,Bacteria,enterobacteria
+548,ASM1160472v1,GCA_011604725.1,Klebsiella aerogenes,Bacteria,enterobacteria
+228602,ASM1180114v1,GCA_011801145.1,Nocardia arthritidis,Bacteria,high G+C Gram-positive bacteria
+1429244,ASM50720v2,GCA_000507205.2,Paenibacillus polymyxa CR1,Bacteria,firmicutes
+615,ASM1342615v1,GCA_013426155.1,Serratia marcescens,Bacteria,enterobacteria
+2704468,ASM1408410v1,GCA_014084105.1,Streptacidiphilus sp. P02-A3a,Bacteria,high G+C Gram-positive bacteria
+1039,ASM1479206v1,GCA_014792065.1,Bacillus amyloliquefaciens,Bacteria,firmicutes
+2665646,ASM1640612v1,GCA_016406125.1,Alicyclobacillus sp. SO9,Bacteria,firmicutes
+1583341,PCPL58T,GCA_900074915.1,Pseudomonas cerasi,Bacteria,g-proteobacteria
+59203,31885_G02,GCA_900635675.1,Salmonella enterica subsp. arizonae,Bacteria,enterobacteria
+718,55685_B01,GCA_900638075.1,Actinobacillus equuli,Bacteria,g-proteobacteria
+284590,ASM251v1,GCA_000002515.1,Kluyveromyces lactis,Eukaryote,budding yeasts
+573826,ASM2694v1,GCA_000026945.1,Candida dubliniensis CD36,Eukaryote,budding yeasts
+296587,ASM9098v2,GCA_000090985.2,Micromonas commoda,Eukaryote,green algae
+284811,ASM9102v4,GCA_000091025.4,Eremothecium gossypii ATCC 10895,Eukaryote,budding yeasts
+436017,ASM9206v1,GCA_000092065.1,Ostreococcus lucimarinus CCE9901,Eukaryote,green algae
+332648,ASM14353v4,GCA_000143535.4,Botrytis cinerea B05.10,Eukaryote,ascomycete fungi
+403677,ASM159280v2,GCA_001592805.2,Peltaster fructicola,Eukaryote,ascomycete fungi
+796027,ASM164002v2,GCA_001640025.2,Sugiyamaella lignohabitans,Eukaryote,budding yeasts
+4911,ASM185444v2,GCA_001854445.2,Kluyveromyces marxianus,Eukaryote,budding yeasts
+1365886,ASM198439v2,GCA_001984395.2,Zygosaccharomyces parabailii,Eukaryote,budding yeasts
+498019,ASM301371v2,GCA_003013715.2,[Candida] auris,Eukaryote,budding yeasts
+4909,ASM305444v1,GCA_003054445.1,Pichia kudriavzevii,Eukaryote,budding yeasts
+2163413,ASM421770v1,GCA_004217705.1,Metschnikowia aff. pulcherrima,Eukaryote,budding yeasts
+318829,ASM434696v1,GCA_004346965.1,Pyricularia oryzae,Eukaryote,rice blast fungus
+1764295,ASM785969v1,GCA_007859695.1,Chloropicon primus,Eukaryote,green algae
+28985,ASM799369v1,GCA_007993695.1,Kluyveromyces lactis,Eukaryote,budding yeasts
+73501,ASM808049v1,GCA_008080495.1,Cordyceps militaris,Eukaryote,ascomycete fungi
+498019,ASM827514v1,GCA_008275145.1,[Candida] auris,Eukaryote,budding yeasts
+227321,ASM901741v1,GCA_009017415.1,Aspergillus flavus,Eukaryote,ascomycete fungi
+36911,ASM949811v1,GCA_009498115.1,Clavispora lusitaniae,Eukaryote,budding yeasts
+13502,ASM1107486v2,GCA_011074865.2,Brettanomyces nanus,Eukaryote,budding yeasts
+5007,ASM1107488v2,GCA_011074885.2,Brettanomyces bruxellensis,Eukaryote,budding yeasts
+660027,ASM1308505v1,GCA_013085055.1,Fusarium oxysporum Fo47,Eukaryote,ascomycete fungi
+500148,ASM1342620v1,GCA_013426205.1,Metarhizium brunneum,Eukaryote,ascomycete fungi
+5478,ASM1421772v1,GCA_014217725.1,Nakaseomyces glabratus,Eukaryote,budding yeasts
+4652,ASM1449061v1,GCA_014490615.1,Yarrowia lipolytic,Eukaryote,budding yeasts
+36651,ASM1676781v1,GCA_016767815.1,Penicillium digitatum,Eukaryote,ascomycete fungi
+182096,AchevalieriM1_assembly01,GCA_016861735.1,Aspergillus chevalieri,Eukaryote,ascomycete fungi
+101028,ASM1695230v1,GCA_016952305.1,Fusarium pseudograminearum,Eukaryote,ascomycete fungi
+5516,ASM1695235v1,GCA_016952355.1,Fusarium culmorum,Eukaryote,ascomycete fungi
+2747967,ASM2310122v1,GCA_023101225.1,Fusarium solani-melongenae CRI 24-3,Eukaryote,
+5059,ASM1478422v2,GCA_014784225.2,Aspergillus flavus CA14,Eukaryote,ascomycete fungi
+5499,Cfulv_R5_v5,GCA_020509005.2,Fulvia fulva Race5_Kim,Eukaryote,ascomycete fungi
+63577,ASM2064779v1,GCA_020647795.1,Trichoderma atroviride P1,Eukaryote,
+101201,ASM2064786v1,GCA_020647865.1,Trichoderma asperellum FT101,Eukaryote,
+573729,ASM22609v1,GCA_000226095.1,Thermothelomyces thermophilus ATCC 42464,Eukaryote,
+1491479,ASM1956561v1,GCA_019565615.1,Trichoderma simmonsii GH-Sj1,Eukaryote,
+6239,WBcel235,GCA_000002985.3,Caenorhabditis elegans BRISTOL N2 ,Eukaryote,nematodes
+170446,ASM1690657v1,GCA_016906575.1,Ceratobasidium sp. AG-Ba,Eukaryote,
+230603,ASM2755758v1,GCA_027557585.1,Saccharomyces uvarum CBS7001,Eukaryote,budding yeasts

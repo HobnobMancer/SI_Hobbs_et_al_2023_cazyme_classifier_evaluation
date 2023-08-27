@@ -43,6 +43,8 @@ library("interp")
 library('reshape2')
 library(Rmisc)
 library(yaml)
+library("heatmaply")
+library("tidyr")
 
 #
 # define global constants
@@ -809,7 +811,7 @@ roc.p <- ggplot(bin.roc.df, aes(x=Specificity, y=Sensitivity, color = Prediction
 roc.p
 ```
 
-```{r}
+```{r rocMain, echo=FALSE}
 bin.roc.df.main <- bin.roc.df[which(bin.roc.df$Prediction_tool %in% c('dbCAN_2','dbCAN_3','dbCAN_4','CUPP')), ]
 p.roc.main <- ggplot(bin.roc.df.main, aes(x=Specificity, y=Sensitivity, color = Prediction_tool)) +
   geom_line() +
@@ -1049,7 +1051,7 @@ p.bin.spec.tax.scatter
 ```
 
 
-```{r binSpecTaxCiSave}
+```{r binSpecTaxCiSave, include=FALSE}
 pdf(file = "../report/cazyme_noncazyme_classification/tax_performance/specificity.ci.pdf",  width = 6.23, height = 8.2)
 p.bin.spec.tax.ci
 dev.off()
@@ -1082,7 +1084,7 @@ p.bin.sens.tax.scatter
 ```
 
 
-```{r binSensTaxCiSave}
+```{r binSensTaxCiSave, include=FALSE}
 pdf(file = "../report/cazyme_noncazyme_classification/tax_performance/sensitivity.ci.pdf",  width = 6.23, height = 8.2)
 p.bin.sens.tax.ci
 dev.off()
@@ -1115,7 +1117,7 @@ p.bin.prec.tax.scatter
 ```
 
 
-```{r binPrecTaxCiSave}
+```{r binPrecTaxCiSave, include=FALSE}
 pdf(file = "../report/cazyme_noncazyme_classification/tax_performance/precision.ci.pdf",  width = 6.23, height = 8.2)
 p.bin.prec.tax.ci
 dev.off()
@@ -1148,7 +1150,7 @@ p.bin.f1.tax.scatter
 ```
 
 
-```{r binF1TaxCiSave}
+```{r binF1TaxCiSave, include=FALSE}
 pdf(file = "../report/cazyme_noncazyme_classification/tax_performance/F1-score.ci.pdf",  width = 6.23, height = 8.2)
 p.bin.f1.tax.ci
 dev.off()
@@ -1181,7 +1183,7 @@ p.bin.acc.tax.scatter
 ```
 
 
-```{r binAccTaxCiSave}
+```{r binAccTaxCiSave, include=FALSE}
 pdf(file = "../report/cazyme_noncazyme_classification/tax_performance/accuracy.ci.pdf",  width = 6.23, height = 8.2)
 p.bin.acc.tax.ci
 dev.off()
@@ -2524,7 +2526,7 @@ kable(class_ri_stats_df, caption="Adjusted Rand Index of CAZyme classifier class
 
 # CAZy class taxonomic performance
 
-```{r}
+```{r classTaxPerformance, include=FALSE}
 build.tax.class.stat.sum <- function(bact.df, euk.df, all.df, stat.param){
   # have Three dfs, all with the same structure
   # cols = X, Genomic_accession, Prediction_tool, CAZy_class, Statistic_parameter, Statistic_value
@@ -2665,7 +2667,7 @@ p.class.tax.spec.scatter
 ```
 
 
-```{r classTaxSpecSave2, echo=FALSE}
+```{r classTaxSpecSave2, include=FALSE}
 # save plots
 pdf(file = "../report/cazy_class_classification/tax_performance/spec.class.tax.ci.pdf",  width = 6.23, height = 8)
 p.class.tax.spec.ci
@@ -2704,7 +2706,7 @@ p.class.tax.sens.scatter
 ```
 
 
-```{r classTaxSensSave, echo=FALSE}
+```{r classTaxSensSave, include=FALSE}
 # save plots
 pdf(file = "../report/cazy_class_classification/tax_performance/sens.class.tax.ci.pdf",  width = 6.23, height = 8)
 p.class.tax.sens.ci
@@ -2740,7 +2742,7 @@ p.class.tax.prec.scatter
 ```
 
 
-```{r classTaxPrecSave, echo=FALSE}
+```{r classTaxPrecSave, include=FALSE}
 # save plots
 pdf(file = "../report/cazy_class_classification/tax_performance/prec.class.tax.ci.pdf",  width = 6.23, height = 8)
 p.class.tax.prec.ci
@@ -2782,7 +2784,7 @@ p.class.tax.f1.scatter
 ```
 
 
-```{r classTaxF1Save2, echo=FALSE}
+```{r classTaxF1Save2, include=FALSE}
 # save plots
 pdf(file = "../report/cazy_class_classification/tax_performance/f1.class.tax.ci.pdf",  width = 6.23, height = 8)
 p.class.tax.f1.ci
@@ -2818,7 +2820,7 @@ p.class.tax.acc.scatter
 ```
 
 
-```{r classTaxAccSave2, echo=FALSE}
+```{r classTaxAccSave2, include=FALSE}
 # save plots
 pdf(file = "../report/cazy_class_classification/tax_performance/acc.class.tax.ci.pdf",  width = 6.23, height = 8)
 p.class.tax.acc.ci
@@ -2832,7 +2834,7 @@ dev.off()
 
 ## Per CAZy class
 
-```{r}
+```{r perCzyClassTax, include=FALSE}
 build.class.tax.per.class.p <- function(stat_sum_df, stat.val){
   # df has colnames:
   # Prediction_tool, Mean, Standard Deviation, LowerCI, UpperCI, Tax_group, CAZy_clas
@@ -3047,7 +3049,7 @@ p.class.tax.spec.scatter.per.cl <- build.class.tax.p.scatter.per.cl(cazy_class_d
 p.class.tax.spec.scatter.per.cl
 ```
 
-```{r classTaxSpecSave, echo=FALSE}
+```{r classTaxSpecSave, include=FALSE}
 # save plots
 pdf(file = "../report/cazy_class_classification/tax_performance/per_cazy_class/spec.class.tax.ci.pdf",  width = 11, height = 8)
 p.class.tax.spec.ci.per.cl
@@ -3088,7 +3090,7 @@ p.class.tax.sens.scatter.per.cl <- build.class.tax.p.scatter.per.cl(cazy_class_d
 p.class.tax.sens.scatter.per.cl
 ```
 
-```{r classTaxSensPerClassSave, echo=FALSE}
+```{r classTaxSensPerClassSave, include=FALSE}
 # save plots
 pdf(file = "../report/cazy_class_classification/tax_performance/per_cazy_class/sens.class.tax.ci.pdf",  width = 11, height = 8)
 p.class.tax.sens.ci.per.cl
@@ -3126,7 +3128,7 @@ p.class.tax.prec.scatter.per.cl <- build.class.tax.p.scatter.per.cl(cazy_class_d
 p.class.tax.prec.scatter.per.cl
 ```
 
-```{r classTaxPrecSave2, echo=FALSE}
+```{r classTaxPrecSave2, include=FALSE}
 # save plots
 pdf(file = "../report/cazy_class_classification/tax_performance/per_cazy_class/prec.class.tax.ci.pdf",  width = 11, height = 8)
 p.class.tax.prec.ci.per.cl
@@ -3168,7 +3170,7 @@ p.class.tax.f1.scatter.per.cl <- build.class.tax.p.scatter.per.cl(cazy_class_df,
 p.class.tax.f1.scatter.per.cl
 ```
 
-```{r classTaxF1Save, echo=FALSE}
+```{r classTaxF1Save, include=FALSE}
 # save plots
 pdf(file = "../report/cazy_class_classification/tax_performance/per_cazy_class/f1.class.tax.ci.pdf",  width = 11, height = 8)
 p.class.tax.f1.ci.per.cl
@@ -3206,7 +3208,7 @@ p.class.tax.acc.scatter.per.cl <- build.class.tax.p.scatter.per.cl(cazy_class_df
 p.class.tax.acc.scatter.per.cl
 ```
 
-```{r classTaxAccSave, echo=FALSE}
+```{r classTaxAccSave, include=FALSE}
 # save plots
 pdf(file = "../report/cazy_class_classification/tax_performance/per_cazy_class/acc.class.tax.ci.pdf",  width = 11, height = 8)
 p.class.tax.acc.ci.per.cl
@@ -3355,7 +3357,7 @@ p.ari.class.tax.ci <- ggplot(class_ari_stats_df_tax.all %>% dplyr::group_by(Taxo
 p.ari.class.tax.ci
 ```
 
-```{r}
+```{r saveClassMlc, include=FALSE}
 pdf(file = "../report/cazy_class_classification/multilabel_classification/cazyClassMLC.RI.ci.pdf",  width = 8.23, height = 5)
 p.ri.class.tax.ci
 dev.off()
@@ -4650,6 +4652,7 @@ write.csv(fam_ari_stats_df, "../report/cazy_family_classification/multilabel_cla
 kable(fam_ari_stats_df, caption="Adjusted Rand Index of CAZyme classifier classification of CAZy family annotations", align='c', digits = 4) %>% kable_styling(full_width = F)
 ```
 
+
 # CAZy family multilabel classification tax performance
 
 ```{r riCalcFamTax, echo=FALSE}
@@ -4796,8 +4799,3 @@ pdf(file = "../report/cazy_family_classification/multilabel_classificiation/cazy
 p.ari.fam.tax.ci
 dev.off()
 ```
-
-
-
-
-

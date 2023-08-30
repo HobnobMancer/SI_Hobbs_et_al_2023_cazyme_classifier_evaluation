@@ -5,6 +5,8 @@
 
 This repository contains supplementary information for analyses reported in Hobbs et al. (2023), independently and comprehensively evaluating the CAZyme classifiers dBCAN2, dbCAN3, dbCAN4, eCAMI and CUPP.
 
+## The comprehensive report can be found [here](https://hobnobmancer.github.io/SI_Hobbs_et_al_2023_cazyme_classifier_evaluation/notebooks/2023-cazyme-classifier-eval.html)
+
 A citation for this work will be added once available. At the present please cite this repository as the source, the DOI:10.5281/zenodo.8123588, and the authors (in order):
 Emma E. M. Hobbs<sup>1,2,3</sup>, Tracey, M. Gloster<sup>1</sup>, Leighton Prichard<sup>2</sup>.
 
@@ -23,8 +25,6 @@ Hotpep, CUPP and eCAMI",
   note = "Version 1. DOI:10.5281/zenodo.8123588"
 }
 ```
-
-## The comprehensive report can be found [here](https://hobnobmancer.github.io/SI_Hobbs_et_al_2023_cazyme_classifier_evaluation/notebooks/2023-cazyme-classifier-eval.html)
 
 To reproduce the analyses, run all commands provided in the walkthrough from the root of this directory.
 

@@ -128,6 +128,7 @@ classifiers_full = c(
 cazy_class_list = c('GH', 'GT', 'PL', 'CE', 'AA', 'CBM')
 ```
 
+
 ```{r importData, include=FALSE}
 tax_grps <- yaml.load_file("../data/test_sets/test_sets/test_set_taxs.yaml")
 
@@ -192,6 +193,7 @@ fam.sample.sizes <- fromJSON(file = "../results/CAZy_fam_testset_freq_2023_07_29
 # Add tax data to dataframes
 #
 
+# add tax groups to df of cazyme/non-cazmye differnetiation
 # binary_stat_df
 bin.stat.tax.col <- c()
 for (genome in binary_stat_df$Genomic_assembly){
@@ -209,6 +211,7 @@ binary_tax_df <- rbind(binary_stat_df, binary_stat_df)
 binary_tax_df$Tax_group <- bin.stat.tax.col
 binary_tax_df
 
+# add tax groups to df of cazy class classification
 # cazy_class_df
 class.stat.tax.col <- c()
 for (genome in cazy_class_df$Genomic_accession){
@@ -227,6 +230,8 @@ cazy_class_tax_df$Tax_group <- class.stat.tax.col
 bact.cazy_class_df <- cazy_class_tax_df[which(cazy_class_tax_df$Tax_group == "Bacteria"), ]
 euk.cazy_class_df <- cazy_class_tax_df[which(cazy_class_tax_df$Tax_group == "Eukaryote"), ]
 
+# add tax groups to df of class classification predictions
+# contains RI and ARI values
 # class_ri_ari_raw_df
 class.ri.stat.tax.col <- c()
 for (genome in class_ri_ari_raw_df$Genomic_accession){
@@ -242,6 +247,88 @@ for (genome in class_ri_ari_raw_df$Genomic_accession){
 class_tax_ri_ari_df <- data.frame(class_ri_ari_raw_df)
 class_tax_ri_ari_df$Tax_group <- class.ri.stat.tax.col
 
+# tax evaluation of CAZy family classification
+# columns needed: Prediction_tool, CAZy_class, Statistic parameter, Statistic value
+fam.tax.euk.df <- read.csv("../results/cazy_family_classifications/tax_performance/family_long_form_stats_tax_comparison_Eukaryote_2023_07_29.csv")
+fam.tax.bact.df <- read.csv("../results/cazy_family_classifications/tax_performance/family_long_form_stats_tax_comparison_Bacteria_2023_07_29.csv")
+# add CAZy class column
+
+# separate names into one vector per CAZy class
+gh.names = c()
+gt.names = c()
+pl.names = c()
+ce.names = c()
+aa.names = c()
+cbm.names = c()
+fam.long.df.tax.col = c()
+
+for (name in cazy_family_long_df$CAZy_family){
+  if (startsWith(name, "GH")){
+    gh.names = append(gh.names, name)
+    fam.long.df.tax.col = append(fam.long.df.tax.col, "GH")
+  } else if (startsWith(name, "GT")){
+    gt.names = append(gt.names, name)
+    fam.long.df.tax.col = append(fam.long.df.tax.col, "GT")
+  } else if (startsWith(name, "PL")){
+    pl.names = append(pl.names, name)
+    fam.long.df.tax.col = append(fam.long.df.tax.col, "PL")
+  } else if (startsWith(name, "CE")){
+    ce.names = append(ce.names, name)
+    fam.long.df.tax.col = append(fam.long.df.tax.col, "CE")
+  } else if (startsWith(name, "AA")){
+    aa.names = append(aa.names, name)
+    fam.long.df.tax.col = append(fam.long.df.tax.col, "AA")
+  } else {
+    cbm.names = append(cbm.names, name)
+    fam.long.df.tax.col = append(fam.long.df.tax.col, "CBM")
+  }
+}
+
+cazy_family_long_df$CAZy_class = fam.long.df.tax.col
+
+# add tax column
+add_cazy_class <- function(df, cazy.class, fam.names){
+  df.subset <- df[which(df$CAZy_family %in% fam.names), ]
+  class.col <- rep(cazy.class, nrow(df.subset))
+  df.subset$CAZy_class <- class.col
+  return(df.subset)
+}
+fam.euk.gh.subset <- add_cazy_class(fam.tax.euk.df, "GH", gh.names)
+fam.euk.gt.subset <- add_cazy_class(fam.tax.euk.df, "GT", gt.names)
+fam.euk.pl.subset <- add_cazy_class(fam.tax.euk.df, "PL", pl.names)
+fam.euk.ce.subset <- add_cazy_class(fam.tax.euk.df, "CE", ce.names)
+fam.euk.aa.subset <- add_cazy_class(fam.tax.euk.df, "AA", aa.names)
+fam.euk.cbm.subset <- add_cazy_class(fam.tax.euk.df, "CBM", cbm.names)
+fam.bact.gh.subset <- add_cazy_class(fam.tax.bact.df, "GH", gh.names)
+fam.bact.gt.subset <- add_cazy_class(fam.tax.bact.df, "GT", gt.names)
+fam.bact.pl.subset <- add_cazy_class(fam.tax.bact.df, "PL", pl.names)
+fam.bact.ce.subset <- add_cazy_class(fam.tax.bact.df, "CE", ce.names)
+fam.bact.aa.subset <- add_cazy_class(fam.tax.bact.df, "AA", aa.names)
+fam.bact.cbm.subset <- add_cazy_class(fam.tax.bact.df, "CBM", cbm.names)
+
+# add data for all tax classes
+fam.tax.df <- rbind(cazy_family_long_df, fam.euk.gh.subset)
+fam.tax.df <- rbind(fam.tax.df, fam.euk.gt.subset)
+fam.tax.df <- rbind(fam.tax.df, fam.euk.pl.subset)
+fam.tax.df <- rbind(fam.tax.df, fam.euk.ce.subset)
+fam.tax.df <- rbind(fam.tax.df, fam.euk.aa.subset)
+fam.tax.df <- rbind(fam.tax.df, fam.euk.cbm.subset)
+
+tax_grp <- rep('All', nrow(cazy_family_long_df))
+tax_grp <- append(tax_grp, rep('Eukaryote', ((nrow(fam.tax.df) - nrow(cazy_family_long_df)))))
+euk.count <- nrow(fam.tax.df) - nrow(cazy_family_long_df)
+
+fam.tax.df <- rbind(fam.tax.df, fam.bact.gh.subset)
+fam.tax.df <- rbind(fam.tax.df, fam.bact.gt.subset)
+fam.tax.df <- rbind(fam.tax.df, fam.bact.pl.subset)
+fam.tax.df <- rbind(fam.tax.df, fam.bact.ce.subset)
+fam.tax.df <- rbind(fam.tax.df, fam.bact.aa.subset)
+fam.tax.df <- rbind(fam.tax.df, fam.bact.cbm.subset)
+
+tax_grp <- append(tax_grp, rep('Bacteria', ((nrow(fam.tax.df) - nrow(cazy_family_long_df) - euk.count))))
+fam.tax.df$Tax_group <- tax_grp
+
+# for evaluation of multi label classification
 # add taxonomic data to CAZy fam fam_classification_df
 fam.tax.col <- c()
 for (genome in fam_classification_df$Genomic_accession){
@@ -258,17 +345,6 @@ cazy_fam_tax_df$Tax_group <- fam.tax.col
 
 bact.cazy_fam_tax_df <- cazy_fam_tax_df[which(cazy_fam_tax_df$Tax_group == "Bacteria"), ]
 euk.cazy_fam_tax_df <- cazy_fam_tax_df[which(cazy_fam_tax_df$Tax_group == "Eukaryote"), ]
-
-# import "class_stats_per_test_set_tax_comparison_<tax_group>_<date>.csv"
-# Contains the calculated performance statistics when evaluating performance of CAZy class prediction per test set.
-# Written in long form with the columns: Genomic_accession, Prediction_tool, CAZy_class, Statistic_parameter, Statistic_value
-# load in each dataframe for each tax group
-# bact.cazy_class_df <- read.csv("../results/cazy_class_classifications/tax_performance/class_stats_per_test_set_tax_comparison_Bacteria_2023_08_01.csv")
-# euk.cazy_class_df <- read.csv("../results/cazy_class_classifications/tax_performance/class_stats_per_test_set_tax_comparison_Eukaryote_2023_08_01.csv")
-
-# import class_classification_tax_comparison_<date>.csv
-# df containing CAZy class RI and ARI
-# class_tax_ri_ari_df <- read.csv("../results/cazy_class_classifications/tax_performance/class_classification_tax_comparison_2023_08_01.csv")
 ```
 
 <div id="summary">
@@ -507,6 +583,7 @@ names(binary_summary_df)[names(binary_summary_df) == "Prediction_tool"] <- "Clas
 # binary_summary_df <- binary_summary_df[c(2,5,6,3,1,4), ]
 row.names(binary_summary_df) = NULL  # hides row names which are added by reordering the rows
 
+dir.create("../report/cazyme_noncazyme_classification", recursive=FALSE) 
 write.csv(binary_summary_df, "../report/cazyme_noncazyme_classification/summaryTable.csv", row.names=FALSE)
 
 kable(
@@ -1263,6 +1340,7 @@ class_summary_df$Prediction_tool <- factor(class_summary_df$Prediction_tool, lev
 names(class_summary_df)[names(class_summary_df) == "Prediction_tool"] <- "Classifier"
 class_summary_df$Classifier <- factor(class_summary_df$Classifier, levels = classifiers_full) # set order data is presented
 
+dir.create("../report/cazy_class_classification", recursive=FALSE)
 write.csv(class_summary_df, "../report/cazy_class_classification/summaryTable.csv", row.names=FALSE)
 
 kable(
@@ -2667,7 +2745,7 @@ p.class.tax.spec.scatter
 ```
 
 
-```{r classTaxSpecSave2, include=FALSE}
+```{r famTaxSpecSave2, include=FALSE}
 # save plots
 pdf(file = "../report/cazy_class_classification/tax_performance/spec.class.tax.ci.pdf",  width = 6.23, height = 8)
 p.class.tax.spec.ci
@@ -2784,7 +2862,7 @@ p.class.tax.f1.scatter
 ```
 
 
-```{r classTaxF1Save2, include=FALSE}
+```{rfamTaxF1Save2, include=FALSE}
 # save plots
 pdf(file = "../report/cazy_class_classification/tax_performance/f1.class.tax.ci.pdf",  width = 6.23, height = 8)
 p.class.tax.f1.ci
@@ -3547,29 +3625,7 @@ fam_subset_f1[fam_subset_f1 == 'Fbeta_score'] <- 'F1-score'
 dbcan.fam.subset <- cazy_family_long_df[which(cazy_family_long_df$Prediction_tool == "dbCAN_2"), ]
 tn.dbcan.fam.subset <- dbcan.fam.subset[which(dbcan.fam.subset$Statistical_parameter == "TNs"), ]
 
-# separate names into one vector per CAZy class
-gh.names = c()
-gt.names = c()
-pl.names = c()
-ce.names = c()
-aa.names = c()
-cbm.names = c()
-
-for (name in tn.dbcan.fam.subset$CAZy_family){
-  if (startsWith(name, "GH")){
-    gh.names = append(gh.names, name)
-  } else if (startsWith(name, "GT")){
-    gt.names = append(gt.names, name)
-  } else if (startsWith(name, "PL")){
-    pl.names = append(pl.names, name)
-  } else if (startsWith(name, "CE")){
-    ce.names = append(ce.names, name)
-  } else if (startsWith(name, "AA")){
-    aa.names = append(aa.names, name)
-  } else {
-    cbm.names = append(cbm.names, name)
-  }
-}
+# names were seperated into one vector per CAZy class in the setup block
 
 # create subsets by CAZy class and associated each data set with the name of its CAZy class
 gh.subset <- fam_subset_f1[which(fam_subset_f1$CAZy_family %in% gh.names), ]
@@ -4653,6 +4709,489 @@ kable(fam_ari_stats_df, caption="Adjusted Rand Index of CAZyme classifier classi
 ```
 
 
+# CAZy family taxonomic performance
+
+## Across all of CAZy
+
+### Specificity
+
+```{r famTaxSpec, echo=FALSE}
+# statistical_parameter needs to be changed to Statistic_parameter for the build.tax.class.stat.sum function
+colnames(fam.tax.df) <- c('X', 'CAZy_family', 'Prediction_tool', 'Statistic_parameter', 'Statistic_value', 'CAZy_class', 'Tax_group')
+fam.tax.df$Prediction_tool <- factor(fam.tax.df$Prediction_tool, levels=classifiers_full)
+
+fam.df.spec.sum.df <- build.tax.class.stat.sum(
+  fam.tax.df[which(fam.tax.df$Tax_group == 'Bacteria'), ],
+  fam.tax.df[which(fam.tax.df$Tax_group == 'Eukaryote'), ],
+  fam.tax.df[which(fam.tax.df$Tax_group == 'All'), ],
+  "Specificity"
+)
+fam.df.spec.sum.df$Prediction_tool <- ordered(fam.df.spec.sum.df$Prediction_tool, levels=classifiers_full)
+
+dir.create("../report/cazy_family_classification/tax_performance", recursive=FALSE)
+write.csv(
+  fam.df.spec.sum.df,
+  "../report/cazy_family_classification/tax_performance/specificity.summaryTable.csv",
+  row.names=FALSE
+)
+
+kable(fam.df.spec.sum.df, caption="Overall performance (represented by the Specificity) of CAZy family classification by CAZy classifiers per taxonomy group", align='c', digits = 4) %>% kable_styling(full_width = F)
+```
+
+```{r famTaxSpecCi, echo=FALSE}
+p.fam.tax.spec.ci <- build.class.tax.p(fam.df.spec.sum.df, "Specificity")
+p.fam.tax.spec.ci
+```
+
+```{r famTaxSpecScatter1, echo=FALSE}
+# plot scatter plot of spec per test set
+p.fam.tax.spec.scatter <- build.class.tax.p.scatter(
+  fam.tax.df[which(fam.tax.df$Tax_group == 'Bacteria'), ],
+  fam.tax.df[which(fam.tax.df$Tax_group == 'Eukaryote'), ],
+  fam.tax.df[which(fam.tax.df$Tax_group == 'All'), ],
+  "Specificity"
+)
+p.fam.tax.spec.scatter
+```
+
+
+```{r famTaxSpecSave3, include=FALSE}
+# save plots
+pdf(file = "../report/cazy_family_classification/tax_performance/spec.fam.tax.ci.pdf",  width = 6.23, height = 8)
+p.fam.tax.spec.ci
+dev.off()
+
+pdf(file = "../report/cazy_family_classification/tax_performance/spec.fam.tax.scatter.pdf",  width = 6.23, height = 8)
+p.fam.tax.spec.scatter
+dev.off()
+```
+
+
+
+
+### Sensitivity
+
+```{r famTaxSens, echo=FALSE}
+cazy_fam_df.sens.sum.df <- build.tax.class.stat.sum(
+  fam.tax.df[which(fam.tax.df$Tax_group == 'Bacteria'), ],
+  fam.tax.df[which(fam.tax.df$Tax_group == 'Eukaryote'), ],
+  fam.tax.df[which(fam.tax.df$Tax_group == 'All'), ],
+  "Sensitivity"
+)
+cazy_fam_df.sens.sum.df$Prediction_tool <- ordered(cazy_fam_df.sens.sum.df$Prediction_tool, levels=classifiers_full)
+
+write.csv(cazy_fam_df.sens.sum.df, "../report/cazy_family_classification/tax_performance/sensitivity.summaryTable.csv", row.names=FALSE)
+
+kable(cazy_fam_df.sens.sum.df, caption="Overall performance (represented by the Sensitivity) of CAZy family classification by CAZy classifiers per taxonomy group", align='c', digits = 4) %>% kable_styling(full_width = F)
+```
+
+```{r famTaxSensCi, echo=FALSE}
+p.fam.tax.sens.ci <- build.class.tax.p(cazy_fam_df.sens.sum.df, "Sensitivity")
+p.fam.tax.sens.ci
+```
+
+```{r famTaxSensScatter, echo=FALSE}
+# plot scatter plot of sens per test set
+p.fam.tax.sens.scatter <- build.class.tax.p.scatter(
+  fam.tax.df[which(fam.tax.df$Tax_group == 'Bacteria'), ],
+  fam.tax.df[which(fam.tax.df$Tax_group == 'Eukaryote'), ],
+  fam.tax.df[which(fam.tax.df$Tax_group == 'All'), ],
+  "Sensitivity"
+)
+p.fam.tax.sens.scatter
+```
+
+
+```{r famTaxSensSave, include=FALSE}
+# save plots
+pdf(file = "../report/cazy_family_classification/tax_performance/sens.fam.tax.ci.pdf",  width = 6.23, height = 8)
+p.fam.tax.sens.ci
+dev.off()
+
+pdf(file = "../report/cazy_family_classification/tax_performance/sens.fam.tax.scatter.pdf",  width = 6.23, height = 8)
+p.fam.tax.sens.scatter
+dev.off()
+```
+
+### Precision
+
+```{r famTaxPrec, echo=FALSE}
+cazy_fam_df.prec.sum.df <- build.tax.class.stat.sum(
+  fam.tax.df[which(fam.tax.df$Tax_group == 'Bacteria'), ],
+  fam.tax.df[which(fam.tax.df$Tax_group == 'Eukaryote'), ],
+  fam.tax.df[which(fam.tax.df$Tax_group == 'All'), ],
+  "Precision"
+)
+cazy_fam_df.prec.sum.df$Prediction_tool <- ordered(cazy_fam_df.prec.sum.df$Prediction_tool, levels=classifiers_full)
+
+dir.create("../report/cazy_family_classification/tax_performance", recursive=FALSE)
+write.csv(cazy_fam_df.prec.sum.df, "../report/cazy_family_classification/tax_performance/precision.summaryTable.csv", row.names=FALSE)
+
+kable(cazy_fam_df.prec.sum.df, caption="Overall performance (represented by the Precision) of CAZy family classification by CAZy classifiers per taxonomy group", align='c', digits = 4) %>% kable_styling(full_width = F)
+```
+
+```{r famTaxPrecCi, echo=FALSE}
+p.fam.tax.prec.ci <- build.class.tax.p(cazy_fam_df.prec.sum.df, "Precision")
+p.fam.tax.prec.ci
+```
+
+```{r famTaxPrecScatter, echo=FALSE}
+# plot scatter plot of prec per test set
+p.fam.tax.prec.scatter <- build.class.tax.p.scatter(
+  fam.tax.df[which(fam.tax.df$Tax_group == 'Bacteria'), ],
+  fam.tax.df[which(fam.tax.df$Tax_group == 'Eukaryote'), ],
+  fam.tax.df[which(fam.tax.df$Tax_group == 'All'), ],
+  "Precision"
+)
+p.fam.tax.prec.scatter
+```
+
+
+```{r famTaxPrecSave, include=FALSE}
+# save plots
+pdf(file = "../report/cazy_family_classification/tax_performance/prec.fam.tax.ci.pdf",  width = 6.23, height = 8)
+p.fam.tax.prec.ci
+dev.off()
+
+pdf(file = "../report/cazy_family_classification/tax_performance/prec.fam.tax.scatter.pdf",  width = 6.23, height = 8)
+p.fam.tax.prec.scatter
+dev.off()
+```
+
+### F1-score
+
+```{r famTaxF1, echo=FALSE}
+fam.tax.df[fam.tax.df == 'Fbeta_score'] <- 'F1-score'
+cazy_fam_df.f1.sum.df <- build.tax.class.stat.sum(
+  fam.tax.df[which(fam.tax.df$Tax_group == 'Bacteria'), ],
+  fam.tax.df[which(fam.tax.df$Tax_group == 'Eukaryote'), ],
+  fam.tax.df[which(fam.tax.df$Tax_group == 'All'), ],
+  "F1-score"
+)
+
+y <- as.character(cazy_fam_df.f1.sum.df$Prediction_tool)
+cazy_fam_df.f1.sum.df$Prediction_tool <- factor(y, levels=classifiers_full)
+cazy_fam_df.f1.sum.df$Prediction_tool <- ordered(cazy_fam_df.f1.sum.df$Prediction_tool, levels=classifiers_full)
+                     
+write.csv(cazy_fam_df.f1.sum.df, "../report/cazy_family_classification/tax_performance/F1-score.summaryTable.csv", row.names=FALSE)
+
+kable(
+  cazy_fam_df.f1.sum.df,
+  caption="Overall performance (represented by the F1-score) of CAZy family classification by CAZy classifiers per taxonomy group",
+  align='c', digits = 4) %>% kable_styling(full_width = F)
+```
+
+```{r famTaxF1Ci, echo=FALSE}
+p.fam.tax.f1.ci <- build.class.tax.p(cazy_fam_df.f1.sum.df, "F1-score")
+p.fam.tax.f1.ci
+```
+
+```{r famTaxF1Scatter, echo=FALSE}
+# plot scatter plot of f1 per test set
+p.fam.tax.f1.scatter <- build.class.tax.p.scatter(
+  fam.tax.df[which(fam.tax.df$Tax_group == 'Bacteria'), ],
+  fam.tax.df[which(fam.tax.df$Tax_group == 'Eukaryote'), ],
+  fam.tax.df[which(fam.tax.df$Tax_group == 'All'), ],
+  "F1-score"
+)
+p.fam.tax.f1.scatter
+```
+
+
+```{r famTaxF1Save2, include=FALSE}
+# save plots
+pdf(file = "../report/cazy_family_classification/tax_performance/f1.fam.tax.ci.pdf",  width = 6.23, height = 8)
+p.fam.tax.f1.ci
+dev.off()
+
+pdf(file = "../report/cazy_family_classification/tax_performance/f1.fam.tax.scatter.pdf",  width = 6.23, height = 8)
+p.fam.tax.f1.scatter
+dev.off()
+```
+
+### Accuracy
+
+```{r famTaxAcc, echo=FALSE}
+cazy_fam_df.acc.sum.df <- build.tax.class.stat.sum(
+  fam.tax.df[which(fam.tax.df$Tax_group == 'Bacteria'), ],
+  fam.tax.df[which(fam.tax.df$Tax_group == 'Eukaryote'), ],
+  fam.tax.df[which(fam.tax.df$Tax_group == 'All'), ],
+  "Accuracy"
+)
+cazy_fam_df.acc.sum.df$Prediction_tool <- ordered(cazy_fam_df.acc.sum.df$Prediction_tool, levels=classifiers_full)
+
+write.csv(cazy_fam_df.acc.sum.df, "../report/cazy_family_classification/tax_performance/accuracy.summaryTable.csv", row.names=FALSE)
+
+kable(cazy_fam_df.acc.sum.df, caption="Overall performance (represented by the Accuracy) of CAZy family classification by CAZy classifiers per taxonomy group", align='c', digits = 4) %>% kable_styling(full_width = F)
+```
+
+```{r famTaxAccCi, echo=FALSE}
+p.fam.tax.acc.ci <- build.class.tax.p(cazy_fam_df.acc.sum.df, "Accuracy")
+p.fam.tax.acc.ci
+```
+
+```{r famTaxAccScatter, echo=FALSE}
+p.fam.tax.acc.scatter <- build.class.tax.p.scatter(
+  fam.tax.df[which(fam.tax.df$Tax_group == 'Bacteria'), ],
+  fam.tax.df[which(fam.tax.df$Tax_group == 'Eukaryote'), ],
+  fam.tax.df[which(fam.tax.df$Tax_group == 'All'), ],
+  "Accuracy"
+)
+p.fam.tax.acc.scatter
+```
+
+
+```{r famTaxAccSave2, include=FALSE}
+# save plots
+pdf(file = "../report/cazy_family_classification/tax_performance/acc.fam.tax.ci.pdf",  width = 6.23, height = 8)
+p.fam.tax.acc.ci
+dev.off()
+
+pdf(file = "../report/cazy_family_classification/tax_performance/acc.fam.tax.scatter.pdf",  width = 6.23, height = 8)
+p.fam.tax.acc.scatter
+dev.off()
+```
+
+
+## Per CAZy class
+
+### Specificity
+
+```{r famTaxSpecTable, echo=FALSE}
+fam.tax.df$Prediction_tool <- factor(fam.tax.df$Prediction_tool, levels=classifiers_full)
+
+spec.tax.fam.sum.df <- build.class.tax.sum(
+  fam.tax.df[which(fam.tax.df$Tax_group == 'Bacteria'), ],
+  fam.tax.df[which(fam.tax.df$Tax_group == 'Eukaryote'), ],
+  fam.tax.df[which(fam.tax.df$Tax_group == 'All'), ],
+  "Specificity"
+)
+
+dir.create("../report/cazy_family_classification/tax_performance/per_cazy_class", recursive=FALSE)
+write.csv(
+  spec.tax.fam.sum.df,
+  "../report/cazy_family_classification/tax_performance/per_cazy_class/specificity.summaryTable.csv",
+  row.names=FALSE
+)
+
+kable(spec.tax.fam.sum.df, caption="Overall performance (represented by the Specificity) of CAZy family classification by CAZy classifiers per taxonomy group", align='c', digits = 4) %>% kable_styling(full_width = F)
+```
+
+```{r famTaxSpecCiPerClass, echo=FALSE}
+p.fam.tax.spec.ci.per.cl <- build.class.tax.per.class.p(spec.tax.fam.sum.df, "Specificity")
+p.fam.tax.spec.ci.per.cl
+```
+
+
+```{r famTaxSpecScatter, echo=FALSE}
+p.fam.tax.spec.scatter.per.cl <- build.class.tax.p.scatter.per.cl(
+  fam.tax.df[which(fam.tax.df$Tax_group == 'Bacteria'), ],
+  fam.tax.df[which(fam.tax.df$Tax_group == 'Eukaryote'), ],
+  fam.tax.df[which(fam.tax.df$Tax_group == 'All'), ],
+  "Specificity"
+)
+p.fam.tax.spec.scatter.per.cl
+```
+
+```{r famTaxSpecSave, include=FALSE}
+# save plots
+pdf(file = "../report/cazy_family_classification/tax_performance/per_cazy_class/spec.fam.tax.ci.pdf",  width = 11, height = 8)
+p.fam.tax.spec.ci.per.cl
+dev.off()
+
+pdf(file = "../report/cazy_family_classification/tax_performance/per_cazy_class/spec.fam.tax.scatter.pdf",  width = 11, height = 8)
+p.fam.tax.spec.scatter.per.cl
+dev.off()
+```
+
+
+### Sensitivity
+
+```{r famTaxSensTable, echo=FALSE}
+sens.tax.fam.sum.df <- build.class.tax.sum(
+  fam.tax.df[which(fam.tax.df$Tax_group == 'Bacteria'), ],
+  fam.tax.df[which(fam.tax.df$Tax_group == 'Eukaryote'), ],
+  fam.tax.df[which(fam.tax.df$Tax_group == 'All'), ],
+  "Sensitivity"
+)
+
+dir.create("../report/cazy_family_classification/tax_performance/per_cazy_class", recursive=FALSE)
+write.csv(
+  sens.tax.fam.sum.df,
+  "../report/cazy_family_classification/tax_performance/per_cazy_class/sensitivity.summaryTable.csv",
+  row.names=FALSE
+)
+
+kable(sens.tax.fam.sum.df, caption="Overall performance (represented by the Sensitivity) of CAZy family classification by CAZy classifiers per taxonomy group", align='c', digits = 4) %>% kable_styling(full_width = F)
+```
+
+```{r famsTaxSensCiPerClass, echo=FALSE}
+p.fam.tax.sens.ci.per.cl <- build.class.tax.per.class.p(sens.tax.fam.sum.df, "Sensitivity")
+p.fam.tax.sens.ci.per.cl
+```
+
+
+```{r famTaxSensScatterClass, echo=FALSE}
+# build.class.tax.p.scatter.per.cl(cazy_class_df
+p.fam.tax.sens.scatter.per.cl <- build.class.tax.p.scatter.per.cl(
+  fam.tax.df[which(fam.tax.df$Tax_group == 'Bacteria'), ],
+  fam.tax.df[which(fam.tax.df$Tax_group == 'Eukaryote'), ],
+  fam.tax.df[which(fam.tax.df$Tax_group == 'All'), ],
+  "Sensitivity"
+)
+p.fam.tax.sens.scatter.per.cl
+```
+
+```{r famTaxSensPerClassSave, include=FALSE}
+# save plots
+pdf(file = "../report/cazy_family_classification/tax_performance/per_cazy_class/sens.fam.tax.ci.pdf",  width = 11, height = 8)
+p.fam.tax.sens.ci.per.cl
+dev.off()
+
+pdf(file = "../report/cazy_family_classification/tax_performance/per_cazy_class/sens.fam.tax.scatter.pdf",  width = 11, height = 8)
+p.fam.tax.sens.scatter.per.cl
+dev.off()
+```
+
+### Precision
+
+```{r famTaxPrecTable, echo=FALSE}
+prec.tax.fam.sum.df <- build.class.tax.sum(
+  fam.tax.df[which(fam.tax.df$Tax_group == 'Bacteria'), ],
+  fam.tax.df[which(fam.tax.df$Tax_group == 'Eukaryote'), ],
+  fam.tax.df[which(fam.tax.df$Tax_group == 'All'), ],
+  "Precision"
+)
+
+write.csv(
+  prec.tax.fam.sum.df,
+  "../report/cazy_family_classification/tax_performance/per_cazy_class/precision.summaryTable.csv",
+  row.names=FALSE
+)
+
+kable(prec.tax.fam.sum.df, caption="Overall performance (represented by the Precision) of CAZy family classification by family classifiers per taxonomy group", align='c', digits = 4) %>% kable_styling(full_width = F)
+```
+
+```{r famTaxPrecCiPerClass, echo=FALSE}
+p.fam.tax.prec.ci.per.cl <- build.class.tax.per.class.p(prec.tax.fam.sum.df, "Precision")
+p.fam.tax.prec.ci.per.cl
+```
+
+
+```{r famTaxPrecScatterClass, echo=FALSE}
+p.fam.tax.prec.scatter.per.cl <- build.class.tax.p.scatter.per.cl(
+  fam.tax.df[which(fam.tax.df$Tax_group == 'Bacteria'), ],
+  fam.tax.df[which(fam.tax.df$Tax_group == 'Eukaryote'), ],
+  fam.tax.df[which(fam.tax.df$Tax_group == 'All'), ],
+  "Precision"
+)
+p.fam.tax.prec.scatter.per.cl
+```
+
+```{r famTaxPrecSave3, include=FALSE}
+# save plots
+pdf(file = "../report/cazy_family_classification/tax_performance/per_cazy_class/prec.fam.tax.ci.pdf",  width = 11, height = 8)
+p.fam.tax.prec.ci.per.cl
+dev.off()
+
+pdf(file = "../report/cazy_family_classification/tax_performance/per_cazy_class/prec.fam.tax.scatter.pdf",  width = 11, height = 8)
+p.fam.tax.prec.scatter.per.cl
+dev.off()
+```
+
+### F1-score
+
+```{r famTaxF1Table, echo=FALSE}
+f1.tax.fam.sum.df <- build.class.tax.sum(
+  fam.tax.df[which(fam.tax.df$Tax_group == 'Bacteria'), ],
+  fam.tax.df[which(fam.tax.df$Tax_group == 'Eukaryote'), ],
+  fam.tax.df[which(fam.tax.df$Tax_group == 'All'), ],
+  "F1-score"
+)
+
+write.csv(
+  f1.tax.fam.sum.df,
+  "../report/cazy_family_classification/tax_performance/per_cazy_class/f1-score.summaryTable.csv",
+  row.names=FALSE
+)
+
+kable(f1.tax.fam.sum.df, caption="Overall performance (represented by the F1-score) of CAZy family classification by CAZy classifiers per taxonomy group", align='c', digits = 4) %>% kable_styling(full_width = F)
+```
+
+```{r famTaxF1CiPerClass, echo=FALSE}
+p.fam.tax.f1.ci.per.cl <- build.class.tax.per.class.p(f1.tax.fam.sum.df, "F1-score")
+p.fam.tax.f1.ci.per.cl
+```
+
+
+```{r famTaxF1CScatterPerClass, echo=FALSE}
+p.fam.tax.f1.scatter.per.cl <- build.class.tax.p.scatter.per.cl(
+  fam.tax.df[which(fam.tax.df$Tax_group == 'Bacteria'), ],
+  fam.tax.df[which(fam.tax.df$Tax_group == 'Eukaryote'), ],
+  fam.tax.df[which(fam.tax.df$Tax_group == 'All'), ],
+  "F1-score"
+)
+p.fam.tax.f1.scatter.per.cl
+```
+
+```{r famTaxF1Save, include=FALSE}
+# save plots
+pdf(file = "../report/cazy_family_classification/tax_performance/per_cazy_class/f1.fam.tax.ci.pdf",  width = 11, height = 8)
+p.fam.tax.f1.ci.per.cl
+dev.off()
+
+pdf(file = "../report/cazy_family_classification/tax_performance/per_cazy_class/f1.fam.tax.scatter.pdf",  width = 11, height = 8)
+p.fam.tax.f1.scatter.per.cl
+dev.off()
+```
+
+### Accuracy
+
+```{r famTaxAccTable, echo=FALSE}
+acc.tax.fam.sum.df <- build.class.tax.sum(
+  fam.tax.df[which(fam.tax.df$Tax_group == 'Bacteria'), ],
+  fam.tax.df[which(fam.tax.df$Tax_group == 'Eukaryote'), ],
+  fam.tax.df[which(fam.tax.df$Tax_group == 'All'), ],
+  "Accuracy"
+)
+
+write.csv(
+  acc.tax.fam.sum.df,
+  "../report/cazy_family_classification/tax_performance/per_cazy_class/accuracy.summaryTable.csv",
+  row.names=FALSE
+)
+
+kable(acc.tax.fam.sum.df, caption="Overall performance (represented by the Accuracy) of CAZy class classification by CAZy classifiers per taxonomy group", align='c', digits = 4) %>% kable_styling(full_width = F)
+```
+
+```{r famTaxAccCiPerClass, echo=FALSE}
+p.fam.tax.acc.ci.per.cl <- build.class.tax.per.class.p(acc.tax.fam.sum.df, "Accuracy")
+p.fam.tax.acc.ci.per.cl
+```
+
+
+```{r famTaxAccScatterPerClass, echo=FALSE}
+p.fam.tax.acc.scatter.per.cl <- build.class.tax.p.scatter.per.cl(
+  fam.tax.df[which(fam.tax.df$Tax_group == 'Bacteria'), ],
+  fam.tax.df[which(fam.tax.df$Tax_group == 'Eukaryote'), ],
+  fam.tax.df[which(fam.tax.df$Tax_group == 'All'), ],
+  "Accuracy"
+)
+p.fam.tax.acc.scatter.per.cl
+```
+
+```{r famTaxAccSave, include=FALSE}
+# save plots
+pdf(file = "../report/cazy_family_classification/tax_performance/per_cazy_class/acc.fam.tax.ci.pdf",  width = 11, height = 8)
+p.fam.tax.acc.ci.per.cl
+dev.off()
+
+pdf(file = "../report/cazy_family_classification/tax_performance/per_cazy_class/acc.fam.tax.scatter.pdf",  width = 11, height = 8)
+p.fam.tax.acc.scatter.per.cl
+dev.off()
+```
+
+
 # CAZy family multilabel classification tax performance
 
 ```{r riCalcFamTax, echo=FALSE}
@@ -4695,8 +5234,8 @@ fam_ri_stats_df_tax.all$Tax_group <- rep("All", nrow(fam_ri_stats_df_tax.all))
 fam_ri_stats_df_tax.all <- rbind(fam_ri_stats_df_tax.all, fam_ri_stats_df_tax.bact)
 fam_ri_stats_df_tax.all <- rbind(fam_ri_stats_df_tax.all, fam_ri_stats_df_tax.euk)
 
-dir.create("../report/cazy_family_classification/multilabel_classificiation", recursive=FALSE)
-write.csv(fam_ri_stats_df_tax.all, "../report/cazy_family_classification/multilabel_classificiation/ri_table_tax_performance.csv", row.names=FALSE)
+dir.create("../report/cazy_family_classification/multilabel_classification", recursive=FALSE)
+write.csv(fam_ri_stats_df_tax.all, "../report/cazy_family_classification/multilabel_classification/ri_table_tax_performance.csv", row.names=FALSE)
 
 kable(fam_ri_stats_df_tax.all, caption="Rand Index of CAZyme famifier classificiation of CAZy fam annotations", align='c', digits = 4) %>% kable_styling(full_width = F)
 ```
@@ -4763,7 +5302,7 @@ fam_ari_stats_df_tax.all$Tax_group <- rep("All", nrow(fam_ari_stats_df_tax.all))
 fam_ari_stats_df_tax.all <- rbind(fam_ari_stats_df_tax.all, fam_ri_stats_df_tax.bact)
 fam_ari_stats_df_tax.all <- rbind(fam_ari_stats_df_tax.all, fam_ri_stats_df_tax.euk)
 
-write.csv(fam_ari_stats_df_tax.all, "../report/cazy_family_classification/multilabel_classificiation/ari_table_tax_performance.csv", row.names=FALSE)
+write.csv(fam_ari_stats_df_tax.all, "../report/cazy_family_classification/multilabel_classification/ari_table_tax_performance.csv", row.names=FALSE)
 
 kable(fam_ari_stats_df_tax.all, caption="Adjusted Rand Index of CAZyme famifier classificiation of CAZy fam annotations", align='c', digits = 4) %>% kable_styling(full_width = F)
 ```
@@ -4791,11 +5330,11 @@ p.ari.fam.tax.ci
 ```
 
 ```{r riAriFamSave, include=FALSE}
-pdf(file = "../report/cazy_family_classification/multilabel_classificiation/cazyFamMLC.RI.ci.pdf",  width = 8.23, height = 5)
+pdf(file = "../report/cazy_family_classification/multilabel_classification/cazyFamMLC.RI.ci.pdf",  width = 8.23, height = 5)
 p.ri.fam.tax.ci
 dev.off()
 
-pdf(file = "../report/cazy_family_classification/multilabel_classificiation/cazyFamMLC.ARI.ci.pdf",  width = 8.23, height = 5)
+pdf(file = "../report/cazy_family_classification/multilabel_classification/cazyFamMLC.ARI.ci.pdf",  width = 8.23, height = 5)
 p.ari.fam.tax.ci
 dev.off()
 ```

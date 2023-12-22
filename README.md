@@ -343,14 +343,23 @@ Statistics were calculated for each classifier and per tool witihn each classifi
 
 The output (a series of dataframes) were written to the `results/` directory. Note, owing to the number and sizes of the files, the `results/` directory is provided as a ZIP archive file in this repository.
 
+# The Report and Evaluation - dbCAN version 4 versus CUPP
 
-# The Report and Evaluation
+The RMarkdown notebook `notebooks/2023-cazyme-classifier-eval-dbcan-CUPP.Rmd` was used to interrogate and visulise the performance statistics calculated by `pyrewton`.
 
-The RMarkdown notebook `notebooks/2023-cazyme-classifier-eval.Rmd` was used to interrogate and visulise the performance statistics calculated by `pyrewton`. 
+A HTML version of notebook can be [viewed here](https://hobnobmancer.github.io/SI_Hobbs_et_al_2023_cazyme_classifier_evaluation/notebooks/2023-cazyme-classifier-eval-dbcan-CUPP.html).
+
+All output from the notebook is available in the `report/` directory. Note, owing to the number and sizes of the files, the `report/` directory is provided as a ZIP archive file in this repository. Due to its size, this directory is provided as a ZIP file (`report-dbcan-cupp.zip`).
+
+After running the RMarkdown notebook, the Python script `summarise_family_populations.py` can be run to generate a CSV file listing  the number of unique NCBI protein version accessions listed in the local CAZyme database for each CAzy family, the total number of proteins included across all test sets per CAZy family, and the percentage of the CAZy family population represented in the test sets. This file is written to `data/test_sets/family_representation.csv`.
+
+# The Report and Evaluation - Across all 13 prediction tools.
+
+The RMarkdown notebook `notebooks/2023-cazyme-classifier-eval.Rmd` was used to interrogate and visulise the performance statistics calculated by `pyrewton`. **This evaluated the performance across all 13 prediction tools**.
 
 A HTML version of notebook can be [viewed here](https://hobnobmancer.github.io/SI_Hobbs_et_al_2023_cazyme_classifier_evaluation/notebooks/2023-cazyme-classifier-eval.html).
 
-All output from the notebook is available in the `report/` directory. Note, owing to the number and sizes of the files, the `report/` directory is provided as a ZIP archive file in this repository.
+All output from the notebook is available in the `report/` directory. Note, owing to the number and sizes of the files, the `report/` directory is provided as a ZIP archive file in this repository. Due to its size, this directory is provided as a ZIP file (`report-all-classifiers.zip`).
 
 After running the RMarkdown notebook, the Python script `summarise_family_populations.py` can be run to generate a CSV file listing  the number of unique NCBI protein version accessions listed in the local CAZyme database for each CAzy family, the total number of proteins included across all test sets per CAZy family, and the percentage of the CAZy family population represented in the test sets. This file is written to `data/test_sets/family_representation.csv`.
 

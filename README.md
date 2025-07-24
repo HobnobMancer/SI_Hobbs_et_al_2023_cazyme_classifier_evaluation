@@ -4,6 +4,7 @@
 [![DOI](https://zenodo.org/badge/624780187.svg)](https://zenodo.org/badge/latestdoi/624780187)
 
 This repository contains supplementary information for analyses reported in Hobbs et al. (2025), independently and comprehensively evaluating the CAZyme classifiers dBCAN2, dbCAN3, dbCAN4, eCAMI and CUPP.
+(Note this repo was renamed from SI_Hobbs_et_al_2023 to SI_Hobbs_et_al_2025 - 2025-07-24).
 
 ## The comprehensive report comparing dbCAN (version 4) and CUPP can be found [here](https://hobnobmancer.github.io/SI_Hobbs_et_al_2025_cazyme_classifier_evaluation/notebooks/2023-cazyme-classifier-eval-dbcan-CUPP.html)
 
